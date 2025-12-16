@@ -7,7 +7,13 @@ const INPUT_DIR = "work/input"
 // 出力ディレクトリ
 const OUTPUT_DIR = "work/output"
 // 使用モデル
-const models = ["openai/gpt-4o", "openai/gpt-4o-mini", "google/gemini-2.5-flash"]
+const models = [
+  "openai/gpt-4o",
+  "openai/gpt-4o-mini",
+  "google/gemini-2.5-flash",
+  "anthropic/claude-3-5-haiku-latest",
+  "xai/grok-2-vision-1212",
+]
 
 const glob = new Bun.Glob("*.{jpg,jpeg,png,webp,gif,pdf}")
 const images = Array.from(glob.scanSync(INPUT_DIR)).map((f) => join(INPUT_DIR, f))

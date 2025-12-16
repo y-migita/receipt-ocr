@@ -62,8 +62,12 @@
   {
     "model": "openai/gpt-4o-mini",
     "image": "receipt_1411.jpg",
-    "success": false,
-    "error": "AI_NoObjectGeneratedError: No object generated: response did not match schema."
+    "success": true,
+    "data": {
+      "issue_date": null,
+      "supplier_name": "ダイコク",
+      "total_amount": 2383
+    }
   },
   {
     "model": "openai/gpt-4o-mini",
@@ -91,7 +95,7 @@
     "success": true,
     "data": {
       "issue_date": "2025-09-06",
-      "supplier_name": "イケマンファーム株式会社",
+      "supplier_name": "イクマンファーム株式会社",
       "total_amount": 2689
     }
   },
@@ -143,6 +147,106 @@
       "issue_date": "2025-09-06",
       "supplier_name": "イケマンファーム株式会社",
       "total_amount": 2689
+    }
+  },
+  {
+    "model": "anthropic/claude-3-5-haiku-latest",
+    "image": "receipt_1957.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2025-09-10",
+      "supplier_name": "FamilyMart",
+      "total_amount": 360
+    }
+  },
+  {
+    "model": "anthropic/claude-3-5-haiku-latest",
+    "image": "receipt_1411.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2023-12-29",
+      "supplier_name": "ダイコク",
+      "total_amount": 2383
+    }
+  },
+  {
+    "model": "anthropic/claude-3-5-haiku-latest",
+    "image": "receipt_1954.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2025-09-01",
+      "supplier_name": "紀伊國屋書店",
+      "total_amount": 15461
+    }
+  },
+  {
+    "model": "anthropic/claude-3-5-haiku-latest",
+    "image": "receipt_1960.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2025-09-06",
+      "supplier_name": "LAWSON",
+      "total_amount": 1039
+    }
+  },
+  {
+    "model": "anthropic/claude-3-5-haiku-latest",
+    "image": "receipt_1958.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2025-09-06",
+      "supplier_name": "イケマンファーム株式会社",
+      "total_amount": 2689
+    }
+  },
+  {
+    "model": "xai/grok-2-vision-1212",
+    "image": "receipt_1957.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2023-09-10",
+      "supplier_name": "FamilyMart",
+      "total_amount": 6360
+    }
+  },
+  {
+    "model": "xai/grok-2-vision-1212",
+    "image": "receipt_1411.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2023-08-12",
+      "supplier_name": "ウエルシア",
+      "total_amount": 2383
+    }
+  },
+  {
+    "model": "xai/grok-2-vision-1212",
+    "image": "receipt_1954.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2023-12-07",
+      "supplier_name": "紀伊国屋書店",
+      "total_amount": 15461
+    }
+  },
+  {
+    "model": "xai/grok-2-vision-1212",
+    "image": "receipt_1960.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2023-08-02",
+      "supplier_name": "LAWSON",
+      "total_amount": 437
+    }
+  },
+  {
+    "model": "xai/grok-2-vision-1212",
+    "image": "receipt_1958.jpg",
+    "success": true,
+    "data": {
+      "issue_date": "2023-06-06",
+      "supplier_name": "ドトールコーヒー",
+      "total_amount": 689
     }
   }
 ]
