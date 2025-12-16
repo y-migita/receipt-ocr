@@ -7,91 +7,43 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 p-6">
-  <h1 class="text-2xl font-bold mb-4">📊 AI OCR結果比較</h1>
-
-  <!-- 凡例 -->
-  <div class="mb-4 text-sm flex gap-4">
-    <span><span class="text-gray-400 border px-2 py-0.5 bg-gray-100 rounded-full text-xs">null</span> =
-      情報なし(AIがデータなしと判断)</span>
-    <span><span class="text-red-400 border px-2 py-0.5 bg-red-100 rounded-full text-xs">undefined</span> = データ無し</span>
+<body class="bg-gray-100 p-2 h-screen overflow-hidden">
+  <div class="flex justify-between items-center mb-2">
+    <h1 class="text-lg font-bold">📊 AI OCR結果比較</h1>
+    <div class="text-xs flex gap-3">
+      <span class="text-gray-400 border px-1 bg-gray-100 rounded-full">null</span>=情報なし
+      <span class="text-red-400 border px-1 bg-red-100 rounded-full">undefined</span>=エラー
+    </div>
   </div>
-
-  <table class="w-full bg-white rounded-lg shadow text-sm" id="table"></table>
-
+  <table class="w-full bg-white rounded shadow text-xs" id="t"></table>
   <script>
-    // 結果JSONを読み込んでテーブルを生成
-    fetch('/output/results.json')
-      .then(res => res.json())
-      .then(data => {
-        // ユニークなモデル名と画像名を抽出
-        const models = [...new Set(data.map(d => d.model))];
-        const images = [...new Set(data.map(d => d.image))];
+    fetch('/output/results.json').then(r => r.json()).then(data => {
+      const models = [...new Set(data.map(d => d.model))];
+      const images = [...new Set(data.map(d => d.image))];
+      const keys = ['issue_date', 'supplier_name', 'total_amount'];
+      const get = (m, img, k) => data.find(x => x.model === m && x.image === img)?.data?.[k];
+      const fmt = (v, k) => v === undefined ? '<span class="text-red-400 border px-1 bg-red-100 rounded-full">undefined</span>'
+        : v === null ? '<span class="text-gray-400 border px-1 bg-gray-100 rounded-full">null</span>'
+          : k === 'total_amount' ? '¥' + v.toLocaleString() : v;
 
-        // 抽出フィールドの定義 [キー, ラベル]
-        const fields = [
-          ['issue_date', '📅 発行日'],
-          ['supplier_name', '🏪 支払先'],
-          ['total_amount', '💰 金額']
-        ];
-
-        // 値を表示用にフォーマット
-        const formatValue = (value, key) => {
-          if (value === undefined) {
-            return '<span class="text-red-400 border px-2 py-0.5 bg-red-100 rounded-full text-xs">undefined</span>';
-          }
-          if (value === null) {
-            return '<span class="text-gray-400 border px-2 py-0.5 bg-gray-100 rounded-full text-xs">null</span>';
-          }
-          if (key === 'total_amount') {
-            return '¥' + value.toLocaleString();
-          }
-          return value;
-        };
-
-        // ヘッダー行を生成
-        let html = `
-          <tr class="bg-gray-800 text-white">
-            <th class="p-3">画像</th>
-            <th class="p-3">項目</th>
-            ${models.map(m => `<th class="p-3">${m.split('/')[1]}</th>`).join('')}
+      document.getElementById('t').innerHTML = `
+        <tr class="bg-gray-100">
+          <th class="p-2" colspan="2"></th>
+          ${images.map(img => `<th class="p-2"><img src="/input/${img}" class="h-32 mx-auto rounded"></th>`).join('')}
+        </tr>
+        <tr class="bg-gray-100 text-gray-600 border-b border-gray-300">
+          <th class="p-2" colspan="2"></th>
+          ${images.map(img => `<th class="p-2">${img}</th>`).join('')}
+        </tr>
+        ${models.map((m, mi) => keys.map((k, i) => `
+          <tr class="${i === 2 && mi < models.length - 1 ? 'border-b-4 border-gray-200' : 'border-b'}">
+            ${i === 0 ? `<td class="p-2 font-medium bg-gray-50" rowspan="3">${m.split('/')[1]}</td>` : ''}
+            <td class="p-1 bg-gray-50">${['📅発行日', '🏪支払先', '💰金額'][i]}</td>
+            ${images.map(img => `<td class="p-2">${fmt(get(m, img, k), k)}</td>`).join('')}
           </tr>
-        `;
-
-        // 各画像ごとにデータ行を生成
-        for (const img of images) {
-          for (let i = 0; i < fields.length; i++) {
-            const [key, label] = fields[i];
-            const isLastField = i === fields.length - 1;
-
-            html += `<tr class="border-b ${isLastField ? 'border-gray-300' : 'border-gray-100'} hover:bg-gray-50">`;
-
-            // 最初の行のみ画像を表示（rowspanで結合）
-            if (i === 0) {
-              html += `
-                <td class="p-3 align-top" rowspan="${fields.length}">
-                  <img src="/input/${img}" class="w-40 rounded shadow" alt="${img}">
-                  <div class="text-xs text-gray-400 mt-1 truncate w-40">${img}</div>
-                </td>
-              `;
-            }
-
-            // 項目ラベル
-            html += `<td class="p-3 text-gray-600 font-medium">${label}</td>`;
-
-            // 各モデルの結果
-            for (const model of models) {
-              const result = data.find(x => x.image === img && x.model === model);
-              const value = result?.data?.[key];
-              html += `<td class="p-3">${formatValue(value, key)}</td>`;
-            }
-
-            html += `</tr>`;
-          }
-        }
-
-        document.getElementById('table').innerHTML = html;
-      });
+        `).join('')).join('')}
+      `;
+    });
   </script>
 </body>
 

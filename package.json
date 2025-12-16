@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "bun run src/index.ts",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "viewer": "bun run work/output/server.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.9",
